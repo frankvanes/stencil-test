@@ -1,0 +1,21 @@
+:host {
+  /*display: block;*/
+}
+
+button {
+  margin: 8px;
+  border: 1px solid #5851ff;
+  background-color: #5851ff;
+  color: yellow;
+  font-size: 13px;
+  font-weight: 700;
+  padding: 16px 20px;
+  text-transform: uppercase;
+  border-radius: 2px;
+}
+
+.btn-on {
+  border: 1px solid yellow;
+  background-color: yellow;
+  color: #5851ff;
+}
