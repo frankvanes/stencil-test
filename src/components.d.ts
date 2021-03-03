@@ -14,6 +14,16 @@ export namespace Components {
     }
     interface AppRoot {
     }
+    interface JgGallery {
+        "preferredHeight": number;
+    }
+    interface JgPhoto {
+        "getHeight": () => Promise<number>;
+        "load": () => Promise<void>;
+        "scale": number;
+        "show": () => Promise<void>;
+        "src": string;
+    }
     interface MyToggleButton {
         "on": boolean;
         "text": string;
@@ -38,6 +48,18 @@ declare global {
         prototype: HTMLAppRootElement;
         new (): HTMLAppRootElement;
     };
+    interface HTMLJgGalleryElement extends Components.JgGallery, HTMLStencilElement {
+    }
+    var HTMLJgGalleryElement: {
+        prototype: HTMLJgGalleryElement;
+        new (): HTMLJgGalleryElement;
+    };
+    interface HTMLJgPhotoElement extends Components.JgPhoto, HTMLStencilElement {
+    }
+    var HTMLJgPhotoElement: {
+        prototype: HTMLJgPhotoElement;
+        new (): HTMLJgPhotoElement;
+    };
     interface HTMLMyToggleButtonElement extends Components.MyToggleButton, HTMLStencilElement {
     }
     var HTMLMyToggleButtonElement: {
@@ -48,6 +70,8 @@ declare global {
         "app-home": HTMLAppHomeElement;
         "app-profile": HTMLAppProfileElement;
         "app-root": HTMLAppRootElement;
+        "jg-gallery": HTMLJgGalleryElement;
+        "jg-photo": HTMLJgPhotoElement;
         "my-toggle-button": HTMLMyToggleButtonElement;
     }
 }
@@ -59,6 +83,13 @@ declare namespace LocalJSX {
     }
     interface AppRoot {
     }
+    interface JgGallery {
+        "preferredHeight"?: number;
+    }
+    interface JgPhoto {
+        "scale"?: number;
+        "src"?: string;
+    }
     interface MyToggleButton {
         "on"?: boolean;
         "onSwitchOff"?: (event: CustomEvent<boolean>) => void;
@@ -68,6 +99,8 @@ declare namespace LocalJSX {
         "app-home": AppHome;
         "app-profile": AppProfile;
         "app-root": AppRoot;
+        "jg-gallery": JgGallery;
+        "jg-photo": JgPhoto;
         "my-toggle-button": MyToggleButton;
     }
 }
@@ -78,6 +111,8 @@ declare module "@stencil/core" {
             "app-home": LocalJSX.AppHome & JSXBase.HTMLAttributes<HTMLAppHomeElement>;
             "app-profile": LocalJSX.AppProfile & JSXBase.HTMLAttributes<HTMLAppProfileElement>;
             "app-root": LocalJSX.AppRoot & JSXBase.HTMLAttributes<HTMLAppRootElement>;
+            "jg-gallery": LocalJSX.JgGallery & JSXBase.HTMLAttributes<HTMLJgGalleryElement>;
+            "jg-photo": LocalJSX.JgPhoto & JSXBase.HTMLAttributes<HTMLJgPhotoElement>;
             "my-toggle-button": LocalJSX.MyToggleButton & JSXBase.HTMLAttributes<HTMLMyToggleButtonElement>;
         }
     }
