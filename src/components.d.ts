@@ -19,10 +19,11 @@ export namespace Components {
     }
     interface JgPhoto {
         "getHeight": () => Promise<number>;
+        "height": number;
         "load": () => Promise<void>;
-        "scale": number;
-        "show": () => Promise<void>;
+        "show": (scale?: number) => Promise<void>;
         "src": string;
+        "width": number;
     }
     interface MyToggleButton {
         "on": boolean;
@@ -87,8 +88,9 @@ declare namespace LocalJSX {
         "preferredHeight"?: number;
     }
     interface JgPhoto {
-        "scale"?: number;
+        "height"?: number;
         "src"?: string;
+        "width"?: number;
     }
     interface MyToggleButton {
         "on"?: boolean;

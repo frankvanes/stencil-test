@@ -8,7 +8,9 @@ export class JgPhoto {
   @Element() el: HTMLElement;
 
   @Prop() src: string;
-  @Prop() scale: number = 50;
+  @Prop({ mutable: true, reflect: true }) width: number;
+  @Prop({ mutable: true, reflect: true }) height: number;
+  @State() scale: number = 100;
   @State() hidden = true;
 
   @Method()
@@ -17,14 +19,15 @@ export class JgPhoto {
     image.setAttribute('src', image.getAttribute('data-src'));
     image.onload = () => {
       image.removeAttribute('data-src');
-      console.log(image.naturalHeight + "x" + image.naturalWidth + " (" + (image.naturalWidth / image.naturalHeight) + ")");
+      this.width = image.naturalWidth;
+      this.height = image.naturalHeight;
     }
   }
 
   @Method()
-  async show() {
+  async show(scale = this.scale) {
     this.hidden = false;
-    this.scale = 10;
+    this.scale = scale;
   }
 
   @Method()
