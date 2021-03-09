@@ -1,5 +1,10 @@
 import { Component, Element, Method, Prop, State, h } from '@stencil/core';
 
+//type Dimensions = {
+//  width: number,
+//  weight: number
+//}
+
 @Component({
   tag: 'jg-photo',
   styleUrl: 'jg-photo.css'
@@ -12,16 +17,28 @@ export class JgPhoto {
   @Prop({ mutable: true, reflect: true }) height: number;
   @State() scale: number = 100;
   @State() hidden = true;
+  @State() loaded = false;
+
+  componentDidLoad() {
+    //const image: HTMLImageElement = Array.prototype.slice.call(this.el.children)[0];
+    const image: HTMLImageElement = this.el.querySelector('img');
+    console.log(image);
+
+    return new Promise((resolve, reject) => {
+      image.onload = () => { resolve(image); };
+      image.onerror = (err) => { reject(err.toString) }
+    }).then((img: HTMLImageElement) => {
+      this.width = img.naturalWidth;
+      this.height = img.naturalHeight;
+    }).catch((err) => console.log(err));
+  }
 
   @Method()
   async load() {
+    if (this.loaded) return;
     const image: HTMLImageElement = this.el.querySelector('img');
     image.setAttribute('src', image.getAttribute('data-src'));
-    image.onload = () => {
-      image.removeAttribute('data-src');
-      this.width = image.naturalWidth;
-      this.height = image.naturalHeight;
-    }
+    image.removeAttribute('data-src');
   }
 
   @Method()
@@ -31,14 +48,22 @@ export class JgPhoto {
   }
 
   @Method()
-  async getHeight() {
+  async getDimensions() {
     const image: HTMLImageElement = this.el.querySelector('img');
-    return image.naturalHeight;
+    return new Promise((resolve, reject) => {
+      if (image.naturalWidth && image.naturalHeight) {
+        resolve({width: image.naturalWidth, height: image.naturalHeight});
+      }
+      image.onload = () => {
+        resolve({width: image.naturalWidth, height: image.naturalHeight});
+      }
+      image.onerror = (err) => { reject(err.toString) }
+    });
   }
 
   render() {
     return (
-      <img style={{width:this.scale+'%', display:(this.hidden?'none':'inline-block')}} data-src={ this.src } />
+      <img style={{width:this.scale+'%', display:(this.hidden?'none':'inline-block')}} src={ this.src } />
     );
   }
 }

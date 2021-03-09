@@ -18,7 +18,7 @@ export namespace Components {
         "preferredHeight": number;
     }
     interface JgPhoto {
-        "getHeight": () => Promise<number>;
+        "getDimensions": () => Promise<unknown>;
         "height": number;
         "load": () => Promise<void>;
         "show": (scale?: number) => Promise<void>;

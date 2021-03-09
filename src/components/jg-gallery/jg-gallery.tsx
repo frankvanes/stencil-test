@@ -6,47 +6,50 @@ import { Component, Element, Host, Prop, State, h } from '@stencil/core';
 })
 export class JgGallery {
   @Element() el: HTMLElement;
-  @State() images: HTMLJgPhotoElement[] = [];
+  @State() photos: HTMLJgPhotoElement[] = [];
   @Prop() preferredHeight = 300;
+  preload = 20;
 
   componentWillLoad() {
-    this.el.querySelectorAll('jg-photo').forEach((image) => {
-      this.images.push(image as HTMLJgPhotoElement);
-      console.log('IMAGE: ' + image.outerHTML);
-    });
-    this.images.forEach((image) => {
-      image.load();
-    });
+    this.photos = Array.prototype.slice.call(this.el.children);
+    //this.photos.slice(0,this.preload).map(image => image.load());
+  }
+
+  componentDidRender() {
+    this.photos.map((image) => console.log(image.width));
+    this.buildRows();
+  }
+
+  buildRows(increment = 3) {
+    let start = 0, end = increment;
+    let currentSlice = [];
+
+    while ((currentSlice = this.photos.slice(start, end)).length) {
+      this.justify(currentSlice);
+      start = end;
+      end += increment;
+    }
   }
 
   buildRow() {
-    this.justify(this.images);
-    this.images = null;
+    this.justify(this.photos);
   }
 
-  justify(images: HTMLJgPhotoElement[]) {
-    const totalWidth300 = images.reduce((acc, image) => {
+  justify(photos: HTMLJgPhotoElement[]) {
+    const totalWidth300 = photos.reduce((acc, image) => {
       console.log("Adding " + image.width);
       return acc + image.width;
     }, 0);
     console.log(totalWidth300);
-    images.forEach((image) => {
+    photos.forEach((image) => {
       image.show();
     });
-  }
-
-  buildRows() {
-    while (this.images && this.images.length) {
-      this.buildRow();
-    }
   }
 
   render() {
     return (
       <Host>
-        {
-          this.buildRows()
-        }
+        <slot />
       </Host>
     );
   }
